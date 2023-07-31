@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'constants/routes.dart';
+
 class LoggedOutView extends StatelessWidget {
   const LoggedOutView({super.key});
 
@@ -15,7 +17,7 @@ class LoggedOutView extends StatelessWidget {
           ElevatedButton(
               onPressed: () {
                 Navigator.of(context)
-                    .pushNamedAndRemoveUntil("/login/", (route) => false);
+                    .pushNamedAndRemoveUntil(Routes.getLoginRoute, (route) => false);
               },
               child: const Text("Proceed"))
         ]),

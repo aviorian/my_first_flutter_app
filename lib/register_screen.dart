@@ -1,4 +1,5 @@
 import 'package:firebase_core/firebase_core.dart';
+import 'constants/routes.dart';
 import 'firebase_options.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -173,10 +174,7 @@ class _RegisterScreenViewState extends State<RegisterScreenView> {
 
               //List<String> mailTypes = ["gmail.com", "outlook.com"];
 
-              Navigator.of(context)
-                  .push(MaterialPageRoute(builder: (BuildContext context) {
-                return const VerifyEmailView();
-              }));
+              Navigator.of(context).pushNamedAndRemoveUntil(Routes.getVerifyEmailRoute, (route) => false);
             },
             style: ElevatedButton.styleFrom(
                 backgroundColor: const Color.fromRGBO(124, 202, 235, 1),
@@ -193,7 +191,7 @@ class _RegisterScreenViewState extends State<RegisterScreenView> {
           ),
           TextButton(
               onPressed: () {
-                Navigator.of(context).pushNamedAndRemoveUntil("/login/", (route) => false);
+                Navigator.of(context).pushNamedAndRemoveUntil(Routes.getLoginRoute, (route) => false);
               
               },
               child: Text(

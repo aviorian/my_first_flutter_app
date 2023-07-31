@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:first_test/constants/routes.dart';
 import 'package:flutter/material.dart';
 import "package:font_awesome_flutter/font_awesome_flutter.dart";
 import 'verify_email_view.dart';
@@ -123,9 +124,9 @@ class _LoginScreenState extends State<LoginScreen> {
                     print(user);
 
                     if (!user.emailVerified) {
-                      Navigator.of(context).pushNamedAndRemoveUntil("/verify/", (route) => true);
+                      Navigator.of(context).pushNamedAndRemoveUntil(Routes.getVerifyEmailRoute, (route) => true);
                     } else {
-                      Navigator.of(context).pushNamedAndRemoveUntil("/LoggedIn/", (route) => false);
+                      Navigator.of(context).pushNamedAndRemoveUntil(Routes.getLoggedInRoute, (route) => false);
                       
                     }
                   } on FirebaseAuthException catch (e) {
@@ -168,7 +169,7 @@ class _LoginScreenState extends State<LoginScreen> {
               TextButton(
                   onPressed: () {
                     Navigator.of(context).pushNamedAndRemoveUntil(
-                        "/register/", (route) => false);
+                        Routes.getRegisterRoute, (route) => false);
                   },
                   style: ButtonStyle(foregroundColor:MaterialStatePropertyAll(Colors.grey.shade300) ),
                   child: const Text("Don't have account yet?"))

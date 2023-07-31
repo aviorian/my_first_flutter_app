@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:first_test/constants/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -32,7 +33,7 @@ class LoggedInView extends StatelessWidget {
 
              if(!user.isAnonymous) {
               await FirebaseAuth.instance.signOut();
-              Navigator.of(context).pushNamedAndRemoveUntil("/loggedout/", (route) => false);
+              Navigator.of(context).pushNamedAndRemoveUntil(Routes.getLoggedOutRoute, (route) => false);
              }
 
           }, child:const Text("Log Out") )

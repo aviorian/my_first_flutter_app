@@ -2,6 +2,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:first_test/login_screen.dart';
 import 'package:flutter/material.dart';
 
+import 'constants/routes.dart';
+
 class VerifyEmailView extends StatelessWidget {
   const VerifyEmailView({super.key});
 
@@ -26,11 +28,7 @@ class VerifyEmailView extends StatelessWidget {
                 if (!user.isAnonymous && !user.emailVerified) {
                   await user.sendEmailVerification();
 
-                  Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) {
-                      return const LoginScreen();
-                    },
-                  ));
+                  Navigator.of(context).pushNamedAndRemoveUntil(Routes.getLoginRoute, (route) => false)
                 }
               },
               child: const Text("Verify my Email")),

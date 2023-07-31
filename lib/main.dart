@@ -1,3 +1,4 @@
+import 'package:first_test/constants/routes.dart';
 import 'package:first_test/logged_in_view.dart';
 import 'package:first_test/logged_out_view.dart';
 import 'package:first_test/login_screen.dart';
@@ -11,20 +12,19 @@ void main() {
   runApp(
      MaterialApp(
       routes: {
-        "/login/":(context) {
+        Routes.getLoginRoute:(context) {
           return const LoginScreen();
-
         },
-        "/register/":(context) {
+        Routes.getRegisterRoute:(context) {
           return  const RegisterScreen();
         },
-        "/verify/":(context) {
+        Routes.getVerifyEmailRoute:(context) {
           return const VerifyEmailView();
         },
-        "/LoggedIn/":(context) {
+        Routes.getLoggedInRoute:(context) {
           return const LoggedInView();
         },
-        "/loggedout/":(context) {
+        Routes.getLoggedOutRoute:(context) {
           return const LoggedOutView();
         }
 
