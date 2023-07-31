@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import "package:font_awesome_flutter/font_awesome_flutter.dart";
+import 'verify_email_view.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -118,24 +119,15 @@ class _LoginScreenState extends State<LoginScreen> {
                             email: email, password: password);
                     print(userCredential);
 
-                    // ignore: use_build_context_synchronously
-                    showDialog<String>(
-                      context: context,
-                      builder: (BuildContext context) => AlertDialog(
-                        title: const Text('You logged in successfully'),
-                        content: Text('Email: ${userCredential.user!.email}'),
-                        actions: <Widget>[
-                          TextButton(
-                            onPressed: () => Navigator.pop(context, 'Cancel'),
-                            child: const Text('Cancel'),
-                          ),
-                          TextButton(
-                            onPressed: () => Navigator.pop(context, 'OK'),
-                            child: const Text('OK'),
-                          ),
-                        ],
-                      ),
-                    );
+                    final user = FirebaseAuth.instance.currentUser!;
+                    print(user);
+
+                    if (!user.emailVerified) {
+                      Navigator.of(context).pushNamedAndRemoveUntil("/verify/", (route) => true);
+                    } else {
+                      Navigator.of(context).pushNamedAndRemoveUntil("/LoggedIn/", (route) => false);
+                      
+                    }
                   } on FirebaseAuthException catch (e) {
                     print(e.code);
                     exceptionMessage = e.code;
@@ -172,7 +164,14 @@ class _LoginScreenState extends State<LoginScreen> {
                             fontWeight: FontWeight.bold)),
                   ),
                 ),
-              )
+              ),
+              TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pushNamedAndRemoveUntil(
+                        "/register/", (route) => false);
+                  },
+                  style: ButtonStyle(foregroundColor:MaterialStatePropertyAll(Colors.grey.shade300) ),
+                  child: const Text("Don't have account yet?"))
             ],
           ),
         ),

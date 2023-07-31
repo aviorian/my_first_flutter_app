@@ -39,6 +39,7 @@ dependencies:
   loading_animation_widget:
   firebase_core: ^2.15.0
   firebase_auth: ^4.7.1
+  flutter_launcher_icons: ^0.13.1
 
 dev_dependencies:
   flutter_test:
