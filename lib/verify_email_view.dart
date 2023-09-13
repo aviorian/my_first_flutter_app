@@ -28,7 +28,7 @@ class VerifyEmailView extends StatelessWidget {
                 if (!user.isAnonymous && !user.emailVerified) {
                   await user.sendEmailVerification();
 
-                  Navigator.of(context).pushNamedAndRemoveUntil(Routes.getLoginRoute, (route) => false)
+                  Navigator.of(context).pushNamedAndRemoveUntil(Routes.getLoginRoute, (route) => false);
                 }
               },
               child: const Text("Verify my Email")),

@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:first_test/constants/routes.dart';
+import 'package:first_test/pop_ups.dart';
 import 'package:flutter/material.dart';
 import "package:font_awesome_flutter/font_awesome_flutter.dart";
 import 'verify_email_view.dart';
@@ -130,25 +131,16 @@ class _LoginScreenState extends State<LoginScreen> {
                       
                     }
                   } on FirebaseAuthException catch (e) {
-                    print(e.code);
                     exceptionMessage = e.code;
-
-                    Navigator.push(context, MaterialPageRoute(
-                      builder: (context) {
-                        return Scaffold(
-                          appBar: AppBar(),
-                          body: Center(child: Text(exceptionMessage)),
-                        );
-                      },
-                    ));
+                    if(exceptionMessage=="channel-error") {
+                      exceptionMessage = "Please-fill-fields-properly";
+                    }
+                    await loginScreenErrorPopUp(context: context,error: exceptionMessage,sepByDash: true);
+ 
+                  }catch (e) {
+                    await loginScreenErrorPopUp(context: context, error:e.toString(),sepByDash:false);
                   }
-                  //      Navigator.push(context, MaterialPageRoute(
-                  //        builder: (context) {
-                  //          return Scaffold(
-                  //            appBar: AppBar(),
-                  //          );
-                  //        },
-                  //      ));
+              
                 },
                 child: Container(
                   width: 170,
