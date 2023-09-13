@@ -2,6 +2,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:first_test/constants/routes.dart';
 import 'package:first_test/pop_ups.dart';
+import 'package:first_test/services/auth/auth_exceptions.dart';
+import 'package:first_test/services/firebase_auth_provider.dart';
 import 'package:flutter/material.dart';
 import "package:font_awesome_flutter/font_awesome_flutter.dart";
 import 'verify_email_view.dart';
@@ -114,33 +116,27 @@ class _LoginScreenState extends State<LoginScreen> {
                 onTap: () async {
                   String email = _controllerMail.text;
                   String password = _controllerPassword.text;
-                  String exceptionMessage = "";
                   try {
-                    UserCredential userCredential = await FirebaseAuth.instance
-                        .signInWithEmailAndPassword(
-                            email: email, password: password);
-                    print(userCredential);
-
-                    final user = FirebaseAuth.instance.currentUser!;
-                    print(user);
-
-                    if (!user.emailVerified) {
-                      Navigator.of(context).pushNamedAndRemoveUntil(Routes.getVerifyEmailRoute, (route) => true);
+                    final provider = FirebaseAuthProvider();
+                    await provider.logIn(email: email, password: password);
+                    final user = provider.currentUser;
+                    if (!user!.isEmailVerified) {
+                      Navigator.of(context).pushNamedAndRemoveUntil(
+                          Routes.getVerifyEmailRoute, (route) => true);
                     } else {
-                      Navigator.of(context).pushNamedAndRemoveUntil(Routes.getLoggedInRoute, (route) => false);
-                      
+                      Navigator.of(context).pushNamedAndRemoveUntil(
+                          Routes.getLoggedInRoute, (route) => false);
                     }
-                  } on FirebaseAuthException catch (e) {
-                    exceptionMessage = e.code;
-                    if(exceptionMessage=="channel-error") {
-                      exceptionMessage = "Please-fill-fields-properly";
-                    }
-                    await loginScreenErrorPopUp(context: context,error: exceptionMessage,sepByDash: true);
- 
-                  }catch (e) {
-                    await loginScreenErrorPopUp(context: context, error:e.toString(),sepByDash:false);
+                  } on UserNotLoggedInException catch (e) {
+                    await loginScreenErrorPopUp(
+                        context: context, error: e.message, sepByDash: false);
+                  } on LogInException catch (e) {
+                    await loginScreenErrorPopUp(
+                        context: context, error: e.message, sepByDash: true);
+                  } on GenericException catch (e) {
+                    await loginScreenErrorPopUp(
+                        context: context, error: e.message, sepByDash: false);
                   }
-              
                 },
                 child: Container(
                   width: 170,
@@ -163,7 +159,9 @@ class _LoginScreenState extends State<LoginScreen> {
                     Navigator.of(context).pushNamedAndRemoveUntil(
                         Routes.getRegisterRoute, (route) => false);
                   },
-                  style: ButtonStyle(foregroundColor:MaterialStatePropertyAll(Colors.grey.shade300) ),
+                  style: ButtonStyle(
+                      foregroundColor:
+                          MaterialStatePropertyAll(Colors.grey.shade300)),
                   child: const Text("Don't have account yet?"))
             ],
           ),

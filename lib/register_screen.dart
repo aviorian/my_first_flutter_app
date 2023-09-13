@@ -1,4 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
+import 'package:first_test/pop_ups.dart';
+import 'package:first_test/services/auth/auth_exceptions.dart';
+import 'package:first_test/services/firebase_auth_provider.dart';
 import 'constants/routes.dart';
 import 'firebase_options.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -7,6 +10,9 @@ import "package:font_awesome_flutter/font_awesome_flutter.dart";
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'verify_email_view.dart';
 import 'login_screen.dart';
+import "package:first_test/services/auth/auth_provider.dart";
+import "package:first_test/services/auth/auth_user.dart";
+
 import "dart:developer" as devtools show log;
 
 class RegisterScreen extends StatefulWidget {
@@ -165,16 +171,23 @@ class _RegisterScreenViewState extends State<RegisterScreenView> {
               final email = _controllerMail.text;
               final password = _controllerPassword.text;
 
-              final currentUser = await FirebaseAuth.instance.currentUser;
-              devtools.log(currentUser.toString());
+              try {
+                final provider = FirebaseAuthProvider();
+                await provider.register(email: email, password: password);
 
-              UserCredential userCredential = await FirebaseAuth.instance
-                  .createUserWithEmailAndPassword(
-                      email: email, password: password);
+                Navigator.of(context).pushNamedAndRemoveUntil(Routes.getVerifyEmailRoute, (route) => false);
+                
+              } on UserNotCreatedException catch(e) {
+                loginScreenErrorPopUp(context: context, error: e.message, sepByDash: false);
+              }on RegisterException catch(e) {
+                loginScreenErrorPopUp(context: context, error: e.message, sepByDash: true);
+              }on GenericException catch(e) {
+                loginScreenErrorPopUp(context: context, error: e.toString(), sepByDash: false);
+              }
 
               //List<String> mailTypes = ["gmail.com", "outlook.com"];
 
-              Navigator.of(context).pushNamedAndRemoveUntil(Routes.getVerifyEmailRoute, (route) => false);
+              
             },
             style: ElevatedButton.styleFrom(
                 backgroundColor: const Color.fromRGBO(124, 202, 235, 1),
