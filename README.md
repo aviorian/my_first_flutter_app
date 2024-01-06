@@ -1,6 +1,6 @@
-# first_test
+# my_first_flutter_app
 
-A new Flutter project.
+This is my first Flutter app for learning android development and gaining new skills on my overall coding experience. This is basic app that provide Sign Up and Sign In functionalities with Twitter-alike UI. I used Firebase framework for its backend structure. I didn't continue to developing it because i have started bigger and more complex Flutter project than this app.
 
 ## Getting Started
 
